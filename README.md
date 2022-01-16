@@ -252,13 +252,12 @@ func main() {
 ```
 
 ## Conditions & Boolean Expressions
-- >
-- <
-- >=
-- <=
-- ==
-- !=
+Following operators are the standard operators supported by Go:
+```
+>, <, >=, <=, ==, !=
+```
 
+Examples
 ```go
 x = 5
 y = 6.5
@@ -458,10 +457,214 @@ func main() {
 } 
 ```
 
+## Range
 
+```go
+func main() {
+	var a []int = []int{1,3,4,56,7,12,4,6}
 
+	// standard way to loop over the slice/array
+	for i := 0; i < len(a); i++ {
+		fmt.Println(a[i])
+	}
 
+	// we can use range keyword to iterate over the slice/array
+	for index, element := range a {
+		fmt.Printf("%d: %d\n", index, element)
+	}
+	
+	// we can use underscore ('_') if we don't plan to use index value
+	for _, element := range a {
+		fmt.Printf("%d\n", element)
+	}
+}
+```
 
+## Maps
 
+Syntax
+```go
+func main() {
+	var <variable_name> map[<key_data_type>]<value_data_type>
+}
+```
 
+```go
+func main() {
 
+	var mp map[string]int // map from string to integer
+	var mp map[string]int = map[string]int{
+		"apple":5,
+		"pear":6,
+		"orange":9,
+	}
+	fmt.Println(mp) // map does not keep track of the order in which they were added
+	fmt.Println(mp["apple"])
+
+	mp = make(map[string]int)
+	mp["apple"] = 900
+	fmt.Println(mp["apple"])
+
+	mp["banana"] = 900 // if key already exists, override the existing value, otherwise add this key-value pair
+	delete(mp, "apple") // deletes the entry with the given key
+	fmt.Println(mp) // map[banana:900]
+
+	// How to check if the key exists in the map?
+	val, ok := mp["apple"] // If key exists, val will store the value of the given key in the map, ok will be set as true. If the key doesn't exist, then val will store the default value of value data type, which is 0 here in case of int, and ok will be set to false.
+
+	fmt.Println(len(mp)) // Prints the length of the map
+}
+```
+
+## Functions
+
+```go
+package main
+
+import "fmt"
+
+// Function without any parameters
+func test1() {
+	fmt.Println("test1")
+}
+
+// Function with one parameter
+func printInteger(x int) {
+	fmt.Println(x)
+}
+
+// Function with two parameters
+func printAddition(x int, y int) {
+	fmt.Println(x + y)
+}
+
+// Function with return type
+func addNumbers(x int, y int) int {
+ 	return x + y
+}
+
+// Function with multiple return values
+func addAndSubtractNumbers(x int, y int) (int, int) {
+ 	return x + y, x - y
+}
+
+// Function with labelled return values
+func addAndSubtractNumbers(x int, y int) (r1 int, r2 int) {
+	r1 = x + y
+	r2 = x - y
+ 	return
+}
+
+// Function with labelled return values
+func addAndSubtractNumbers(x int, y int) (r1, r2 int) {
+	r1 = x + y
+	r2 = x - y
+ 	return
+}
+
+// Function with deferred statement
+func addAndSubtractNumbers(x int, y int) (r1 int, r2 int) {
+	defer fmt.Println("exiting the function") // this statement will get executed after the return statement
+	r1 = x + y
+	r2 = x - y
+ 	return
+}
+
+func main() {
+	test1() // this is how we call the function, can be re-used multiple times
+
+	printInteger(5)
+	printAddition(5,6)
+
+	sum := addNumbers(6,7)
+	fmt.Println(sum)
+
+	sum, subtract := addAndSubtractNumbers(10, 3)
+	fmt.Println(sum, subtract)
+}
+```
+
+## Advanced Function Concepts
+
+```go
+func main() {
+	// create a function like this, which can be called anytime using that function variable
+	test := func() {
+		fmt.Println("hello!")
+	}
+
+	// calling the function using that function variable
+	test()
+
+	// we can call the function inline at the same time when we are defining the function
+	ans := func(x int) int {
+		return x * -1
+	}(8)
+	fmt.Println(ans) // -8
+
+	test1 = func(x int) int {
+		return x * -1
+	}
+	test2 = func(x int) int {
+		return x * 7
+	}
+	printFunctionOutput(test1, 7) // -7
+	printFunctionOutput(test2, 7) // 49
+}
+
+// we can pass a function as function parameter also
+func printFunctionOutput(myfunc func(int) int, x int) {
+	fmt.Println(myFunc(x))
+}
+```
+
+### Function Closure
+```go
+package main
+
+import "fmt"
+
+// Function can be used as return value also
+func returnFunc(x string) func() {
+	return func() {
+		fmt.Println(x)
+	}
+}
+
+func main() {
+	returnFunc("hello")() // prints "hello"
+	x := returnFunc("goodbye")
+	x() // prints "goodbye"
+}
+```
+
+## Mutable & Immutable Data Types
+
+Example of Immutable data type
+```go
+func main() {
+	var x int = 5
+	y := x // y is equal to the value of x
+	y = 7 // value of y gets updated here
+	fmt.Println(x, y) // 5, 7
+}
+```
+
+Example of Mutable data type
+```go
+func main() {
+	var x []int = []int{3, 4, 5} 
+	y := x // y is equal to the slice that x is pointing to
+	y[0] = 100 // value of y gets updated here, which results into the updation in x also
+	fmt.Println(x, y) // [100, 4, 5] [100, 4, 5]
+
+	var x map[string]int = map[string]int{"hello": 2}
+	y := x
+	y["world"] = 100
+	fmt.Println(x, y) // map[hello:2 world:100] map[hello:2 world:100]
+
+	var x [2]int = [2]int{3,4}
+	y := x
+	y[0] = 100
+}
+```
