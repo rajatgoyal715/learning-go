@@ -663,8 +663,95 @@ func main() {
 	y["world"] = 100
 	fmt.Println(x, y) // map[hello:2 world:100] map[hello:2 world:100]
 
-	var x [2]int = [2]int{3,4}
+	var x [2]int = [2]int{3,4} // x := []int{3,4}
 	y := x
 	y[0] = 100
+	x[1] = 200 // this will change value of y also, since both are referring to the same address
+}
+```
+
+```go
+package main
+
+import "fmt"
+func changeFirst(slice []int) {
+	slice[0] = 100
+}
+func  main() {
+	var x []int = []int{3,4,5}
+	fmt.Println(x)
+	changeFirst(x)
+	fmt.Println(x)
+}
+```
+
+## Pointers & Dereference Operator
+
+```go
+func main() {
+	x := 7
+	y := &x // stores the reference of x, or pointer to x
+	fmt.Println(x, y) // prints something like 7 0xc0000100a0
+
+	*y = 8 // de-reference the pointer
+	fmt.Println(x, y) // 7 8
+}
+```
+
+```go
+func changeValue(str *string) { // asterisk to left of a data type means that it is a pointer to that data type
+	*str = "changed!" // asterisk to left of a variable name means the value of this variable (value at this address)
+}
+
+func changeValue2(str string) {
+	str = "changed again!"
+}
+
+func main() {
+	toChange := "hello"
+	fmt.Println(toChange)
+	// &x means the address or pointer to that variable, which points to the actual value
+	changeValue(&toChange) // this will change the value since str is passed as pointer / reference
+	fmt.Println(toChange)
+	changeValue2(toChange) // this will not change the value since str is passed as value directly
+	fmt.Println(toChange)
+
+	// * - dereference pointer
+	// & - get pointer 
+}
+```
+
+```go
+func main() {
+	toChange := "hello"
+	var pointer *string = &toChange          // pointer stores the address of the string
+	var pointerToPointer **string = &pointer // pointer to pointer stores the address of the pointer
+	fmt.Println(pointer, pointerToPointer)
+}
+```
+
+```go
+func main() {
+	
+}
+```
+```go
+func main() {
+	
+}
+```
+```go
+func main() {
+	
+}
+```
+```go
+func main() {
+	
+}
+```
+```go
+func main() {
+	
 }
 ```
