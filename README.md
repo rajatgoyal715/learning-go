@@ -730,16 +730,71 @@ func main() {
 }
 ```
 
+## Structs and Custom Types
+
 ```go
+package main
+
+type Point struct {
+	x int32
+	y int32
+}
+
 func main() {
-	
+	var p1 Point = Point{1,2}
+	var p2 Point = Point{-5,7}
+	fmt.Println(p1.x)
+	fmt.Println(p2.y)
+
+	p3 := Point{3,4}
+	p4 := Point{x: 7} // variables which are not provided some value will take default values
+
+	p5 := &Point{y:3}
+	fmt.Println(p5)
+	changeX(p5)
+	fmt.Println(p5)
+	(*p5).x = 50 // this is the usual thinking since we have to de-reference the pointer first, and then change the values
+	p5.x = 50 // this is also supported with structs where we don't need to dereference the pointer before accessing the values	
+}
+
+func changeX(pt *Point) {
+	pt.x = 100
 }
 ```
+
+### Embedded Struct
 ```go
 func main() {
-	
+	type Point struct {
+		x int32
+		y int32
+	}
+
+	type Circle struct {
+		radius float64
+		center *Point
+		*Point
+	}
+
+	type Circle2 struct {
+		radius float64
+		*Point // Embedded struct - this is possible only when the fields inside Point struct are not already present in Circle2 struct.
+	}
+
+	func main() {
+		c1 := Circle{4.56, &Point{4,5}}
+		fmt.Println(c1) // 4.56 0xc00000a0
+		fmt.Println(c1.center.x) // 4
+
+		c2 := Circle2{4.56, &Point{4,5}}
+		fmt.Println(c2)
+		fmt.Println(c2.x) // 4 - we can directly access fields of embedded struct as if they are first class fields
+		fmt.Println(c2.y) // 5
+	}
 }
 ```
+
+
 ```go
 func main() {
 	
