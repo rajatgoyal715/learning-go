@@ -838,13 +838,47 @@ func main() {
 }
 ```
 
+## Interfaces
 ```go
-func main() {
-	
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type Shape interface {
+	area() float64
 }
-```
-```go
+
+type Circle struct {
+	radius float64
+}
+
+type Rectangle struct {
+	width float64
+	height float64
+}
+
+type Shape2 interface { // structs can implement multiple interfaces
+	perimeter() float64
+}
+
+func (c Circle) area() float64 {
+	return math.Pi * c.radius * c.radius
+}
+
+func (r *Rectangle) area() float64 {
+	return r.width * r.height
+}
+
 func main() {
-	
+	c1 := Circle{4.5}
+	r1 := Rectangle{5, 7}
+	shapes := []Shape{c1, &r1}
+
+	for _, shape := range shapes {
+		fmt.Println(shape.area())
+	}
 }
 ```
