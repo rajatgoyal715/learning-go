@@ -794,12 +794,50 @@ func main() {
 }
 ```
 
-
+## Methods
 ```go
+
+type Student struct {
+	name string
+	grades []int
+	age int
+}
+
+func (s Student) getAge() int {
+	return s.age
+}
+
+func (s Student) setAge(age int) {
+	s.age = age
+}
+
+func (s *Student) setAge2(age int) { // passing student as pointer so that fields can be updated
+	s.age = age
+}
+
+func (s Student) getAverageGrade() float32 { // we don't need to pass the pointer to student since we are not changing anything
+	sum := 0
+	for _, value := range s.grades {
+		sum += value
+	}
+	return float32(sum) / float32(len(s.grades))
+}
+
 func main() {
-	
+	s1 := Student{"Rajat", []int{70, 90, 80, 85}, 24}
+	s1.getAge()
+
+	fmt.Println(s1)
+	s1.setAge(20) // this will not update the age since student has been passed as value
+	fmt.Println(s1)
+	s1.setAge2(20) // this will update the age since student has been passed as pointer
+	fmt.Println(s1)
+
+	avg := s1.getAverageGrade()
+	fmt.Println(avg)
 }
 ```
+
 ```go
 func main() {
 	
